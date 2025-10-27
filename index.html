@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Simple E-Commerce Product Page</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+  }
+  h2 { color: #333; margin-bottom: 20px; }
+  .container {
+    max-width: 700px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+  }
+  .product {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+  .product:hover { transform: scale(1.03); }
+  img { width: 100%; border-radius: 10px; }
+  button {
+    background: #007bff; color: white; border: none; padding: 8px 15px;
+    border-radius: 5px; cursor: pointer; margin-top: 10px;
+  }
+  button:hover { background: #0056b3; }
+  #cart {
+    background: #fff;
+    margin-top: 30px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  #cart h3 { margin-top: 0; }
+  #cartItems { list-style-type: none; padding: 0; }
+  #cartItems li { margin: 5px 0; }
+  .removeBtn {
+    background: #dc3545; margin-left: 10px; padding: 4px 8px; font-size: 0.9em;
+  }
+  .removeBtn:hover { background: #a71d2a; }
+</style>
+</head>
+<body>
+
+<h2> E-Commerce Product Page</h2>
+
+<div class="container" id="products"></div>
+
+<div id="cart">
+  <h3> Cart</h3>
+  <ul id="cartItems"></ul>
+  <p><b>Total:</b> ₹<span id="total">0</span></p>
+</div>
+
+<script>
+const products = [
+  { id: 1, name: "Headphones", price: 999, img: "headphones.jpg" },
+  { id: 2, name: "Smart Watch", price: 1599, img: "smart watch.jpg" },
+  { id: 3, name: "Bluetooth Speaker", price: 799, img: "speaker.jpg" }
+];
+
+let cart = [];
+
+// Display products dynamically
+function displayProducts() {
+  const container = document.getElementById("products");
+  products.forEach(p => {
+    container.innerHTML += `
+      <div class="product">
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>Price: ₹${p.price}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      </div>`;
+  });
+}
+
+// Add to cart
+function addToCart(id) {
+  const product = products.find(p => p.id === id);
+  cart.push(product);
+  updateCart();
+}
+
+// Remove from cart
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCart();
+}
+
+// Update cart display
+function updateCart() {
+  const cartItems = document.getElementById("cartItems");
+  const totalEl = document.getElementById("total");
+
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    total += item.price;
+    cartItems.innerHTML += `
+      <li>${item.name} - ₹${item.price}
+        <button class="removeBtn" onclick="removeFromCart(${index})">Remove</button>
+      </li>`;
+  });
+
+  totalEl.innerText = total;
+}
+
+// Initialize
+displayProducts();
+</script>
+
+</body>
+</html>
